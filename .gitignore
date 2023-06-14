@@ -3,3 +3,5 @@
 .git
 dist
 sendgrid.env
+
+/yarn.lock
