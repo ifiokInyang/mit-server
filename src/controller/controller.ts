@@ -21,7 +21,6 @@ const processLoad = async (req: Request, res: Response) => {
       ac,
       otherLoads,
     } = req.body;
-
     const validateResult = loadSchema.validate(req.body, option);
     if (validateResult.error) {
       return res.status(400).json({
