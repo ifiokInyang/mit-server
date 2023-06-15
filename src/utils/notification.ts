@@ -2,42 +2,12 @@ import {
   FromAdminMail,
   userSubject,
 } from "../Config";
-import nodemailer from "nodemailer";
 const sgMail = require("@sendgrid/mail");
 
 
-const transport = nodemailer.createTransport({
-  service: "gmail" /*service and host are the same thing */,
-  auth: {
-    user: process.env.GMAIL_USER,
-    pass: process.env.GMAIL_PASS,
-  },
-  tls: {
-    rejectUnauthorized: false,
-  },
-});
-
-export const mailSent = async (
-  from: string,
-  to: string,
-  subject: string,
-  html: string
-) => {
-  try {
-    const response = await transport.sendMail({
-      from: FromAdminMail,
-      to,
-      subject: userSubject,
-      html,
-    });
-    return response;
-  } catch (err) {
-    console.log(err);
-  }
-};
 
 
-export const emailHtml3 = (link: string): string => {
+export const emailHtml = (firstName: string): string => {
   let response = `
     <div style="max-width:700px;
     margin:auto;
@@ -48,26 +18,41 @@ export const emailHtml3 = (link: string): string => {
     "> 
     <h2 style="text-align:center;
     text-transform:uppercase;
-    color:teal;
+    color:#c89116;
     ">
     Mitaka Trade Africa Company Ltd.
     </h2>
-    <p>Hi there, we have received your load details, we will get in touch with you shortly.</p>
-     </div>
+    <p>Dear ${firstName}, thank you for choosing Mitaka Trade Company.</p>
+    <p><strong>We have received your load request and we will respond to you shortly about your quotation.</strong></p>
+     
+    <p>Best,<p>
+    <div style="font-family: Arial, sans-serif; font-size: 14px; line-height: 1.5; color: #333333;">
+        Olabimpe Enike<br>
+        General Manager, Mitaka Trade Africa Limited<br><br>
+
+        M: <a href="tel:+2348038384141" style="color: #333333; text-decoration: none;">+234-803-838-4141</a><br>
+        T: <a href="tel:091MITAKA" style="color: #333333; text-decoration: none;">091MITAKA (0913 612 6191)</a><br>
+        E: <a href="mailto:admin@mitakatradeafrica.com" style="color: #333333; text-decoration: none;">admin@mitakatradeafrica.com</a><br>
+        W: <a href="http://www.mitakatradeafrica.com" style="color: #333333; text-decoration: none;">www.mitakatradeafrica.com</a><br><br>
+
+        Plot 3b, Oko Awo Street,<br>
+        Victoria Island, Lagos.<br><br>
+    </div>
+    </div>
     `;
   return response;
 };
 
 //Send grid
 
-export const sendgridEmail = (email: string) => {
+export const sendgridEmail = (email: string, firstName: string) => {
     sgMail.setApiKey(process.env.SENDGRID_API_KEY!);
     const msg = {
-      to: `${email}`, 
-      from: "admin@mitakatradeafrica.com", 
-      subject: "Starting out with a Test Email",
-      text: "and easy to do anywhere, even with Node.js",
-      html: "<strong>and easy to do anywhere, even with Node.js</strong>",
+      to: `${email}`,
+      from: `${process.env.ADMIN_MAIL!}`,
+      subject: "Thank you for reaching out to Mitaka",
+      text: "Invest now and save 10 year upfront mainenance cost.",
+      html: `${emailHtml(firstName)}`,
     };
     sgMail
       .send(msg)
@@ -75,6 +60,6 @@ export const sendgridEmail = (email: string) => {
         console.log("Email sent");
       })
       .catch((error: any) => {
-        console.error(error);
+        console.error(error.response.body);
       });
 }

@@ -4,4 +4,4 @@
 dist
 sendgrid.env
 
-/yarn.lock
+yarn.lock
