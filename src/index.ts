@@ -4,7 +4,8 @@ import logger from "morgan";
 import mongoose from "mongoose";
 
 import dotenv from 'dotenv';
-import loadRoutes from "./routes/route"
+import loadRoutes from "./routes/loadRoute";
+import userRoutes from "./routes/userRoutes";
 const cookieParser = require("cookie-parser");
 
 dotenv.config()
@@ -20,7 +21,7 @@ app.use(logger("dev"));
 //ROUTES
 
 app.use("/api/loads", loadRoutes);
-
+app.use("/api/users", userRoutes);
 
 
 (async () => {

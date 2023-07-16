@@ -1,7 +1,7 @@
 import express, { Request, Response } from "express";
-import UserLoad from "../model";
 import { sendgridEmail } from "../utils/notification";
 import { option, loadSchema } from "../utils/validation";
+import UserLoad from "../model/loadModel";
 
 const processLoad = async (req: Request, res: Response) => {
   try {
@@ -45,7 +45,9 @@ const processLoad = async (req: Request, res: Response) => {
       otherLoads,
     });
 
-    sendgridEmail(email, firstName);
+    const message =
+      "We have received your load request and we will respond to you shortly about your quotation.";
+    sendgridEmail(email, firstName, message);
     return res.status(200).json({
       message:
         "We have received your information, Kindly check your mail for a follow-up on your quote.",
@@ -57,6 +59,7 @@ const processLoad = async (req: Request, res: Response) => {
     });
   }
 };
+
 
 export default {
   processLoad,
